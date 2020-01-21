@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityAPI.Data;
+using IdentityAPI.Data.DbModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,7 +35,7 @@ namespace IdentityAPI
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //Identity framework
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -53,7 +54,7 @@ namespace IdentityAPI
 
             //Initializer database
             var context = ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var userManager = ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var userManager = ServiceProvider.GetRequiredService<UserManager<AppUser>>();
             context.Database.EnsureCreated();
 
             app.UseHttpsRedirection();

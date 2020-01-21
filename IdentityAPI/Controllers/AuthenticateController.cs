@@ -22,13 +22,13 @@ namespace IdentityAPI.Controllers
     {
         #region Variables
 
-        private UserManager<ApplicationUser> _userManager;
+        private UserManager<AppUser> _userManager;
         //  private IServiceProvider _serviceProvider;
         private IConfiguration _configuration;
         #endregion
 
         #region Constructor
-        public AuthenticateController(UserManager<ApplicationUser> userManager,
+        public AuthenticateController(UserManager<AppUser> userManager,
                                       IConfiguration configuration)
         {
             _userManager = userManager;
@@ -48,7 +48,7 @@ namespace IdentityAPI.Controllers
             {
                 return Conflict("Email ID is already registered");
             }
-            var applicationUser = new ApplicationUser()
+            var applicationUser = new AppUser()
             {
                 Email = signUp.Email,
                 UserName = signUp.Email,

@@ -5,9 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200121063801_Initial Create.cs" />
+    <Compile Remove="Migrations\20200121063801_Initial Create.Designer.cs" />
+    <Compile Remove="Migrations\20200121064307_Initial Create.cs" />
+    <Compile Remove="Migrations\20200121064307_Initial Create.Designer.cs" />
+    <Compile Remove="Migrations\20200121082805_Inital.cs" />
+    <Compile Remove="Migrations\20200121082805_Inital.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
