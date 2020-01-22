@@ -45,9 +45,9 @@ namespace IdentityAPI.Controllers
         public async Task<IActionResult> Register([FromBody]RegistrationDTO signUp)
         {
             //1. check if user exist in DB
-            var user = _userManager.FindByEmailAsync(signUp.Email);
+            var user =await _userManager.FindByEmailAsync(signUp.Email);
 
-            if (user.Result != null)
+            if (user != null)
             {
                 return Conflict("Email ID is already registered");
             }
