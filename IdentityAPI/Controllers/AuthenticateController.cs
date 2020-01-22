@@ -22,7 +22,7 @@ namespace IdentityAPI.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        ILoggerFactory _loggerFactory;
+     
         #region Variables
 
         private UserManager<AppUser> _userManager;

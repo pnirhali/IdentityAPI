@@ -2,6 +2,7 @@
 using IdentityAPI.DTO;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,8 @@ namespace IdentityAPI.Handlers
                 code = HttpStatusCode.BadRequest;
             }
 
+
+            Log.Error(ex, "error has been occured");
             var result = JsonConvert.SerializeObject(
                 new ErrorDTO
                 {

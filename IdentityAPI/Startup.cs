@@ -33,15 +33,13 @@ namespace IdentityAPI
         {
             services.AddControllers();
             //Configure SQL server 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>  
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //Identity framework
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
