@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityAPI.Data;
 using IdentityAPI.Data.DbModel;
+using IdentityAPI.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,8 @@ namespace IdentityAPI
         public IConfiguration Configuration { get; }
 
         private IServiceProvider ServiceProvider { get; set; }
+        public static readonly ILoggerFactory MyLoggerFactory
+    = LoggerFactory.Create(builder => { builder.; });
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -46,10 +49,14 @@ namespace IdentityAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // exception handler for custom exception
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+         //       app.UseDeveloperExceptionPage();
             }
+
+            //Get ServiceProvider for creating dbcontext
             ServiceProvider = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider;
 
             //Initializer database

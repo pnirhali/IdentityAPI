@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityAPI.Models
+namespace IdentityAPI.DTO
 {
-    public class LoginModel
+    public class LoginDTO
     {
         [Required(ErrorMessage = "User Name is required")]
         public string Username { get; set; }

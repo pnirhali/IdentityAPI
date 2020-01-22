@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityAPI.Models
+namespace IdentityAPI.DTO
 {
-    public class RegistrationModel
+    public class RegistrationDTO
     {
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]

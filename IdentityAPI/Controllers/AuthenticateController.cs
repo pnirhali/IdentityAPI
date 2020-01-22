@@ -5,13 +5,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityAPI.CustomExceptions;
 using IdentityAPI.Data;
-using IdentityAPI.Models;
+using IdentityAPI.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityAPI.Controllers
@@ -20,6 +22,7 @@ namespace IdentityAPI.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
+        ILoggerFactory _loggerFactory;
         #region Variables
 
         private UserManager<AppUser> _userManager;
@@ -39,7 +42,7 @@ namespace IdentityAPI.Controllers
 
         #region Actions
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody]RegistrationModel signUp)
+        public async Task<IActionResult> Register([FromBody]RegistrationDTO signUp)
         {
             //1. check if user exist in DB
             var user = _userManager.FindByEmailAsync(signUp.Email);
@@ -80,9 +83,15 @@ namespace IdentityAPI.Controllers
 
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody]LoginModel login)
+        public async Task<IActionResult> Login([FromBody]LoginDTO login)
         {
             var user = await _userManager.FindByNameAsync(login.Username);
+
+            if (await _userManager.CheckPasswordAsync(user, login.Password))
+            {
+                throw new Exception();
+            }
+
             if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
             {
 
@@ -107,6 +116,7 @@ namespace IdentityAPI.Controllers
                     expiration = token.ValidTo
                 });
             }
+            
             return Unauthorized();
         }
 
