@@ -39,7 +39,6 @@ namespace IdentityAPI.Handlers
                 code = HttpStatusCode.BadRequest;
             }
 
-
             Log.Error(ex, "error has been occured");
             var result = JsonConvert.SerializeObject(
                 new ErrorDTO

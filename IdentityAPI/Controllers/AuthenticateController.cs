@@ -22,7 +22,7 @@ namespace IdentityAPI.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-     
+
         #region Variables
 
         private UserManager<AppUser> _userManager;
@@ -45,7 +45,7 @@ namespace IdentityAPI.Controllers
         public async Task<IActionResult> Register([FromBody]RegistrationDTO signUp)
         {
             //1. check if user exist in DB
-            var user =await _userManager.FindByEmailAsync(signUp.Email);
+            var user = await _userManager.FindByEmailAsync(signUp.Email);
 
             if (user != null)
             {
@@ -61,7 +61,7 @@ namespace IdentityAPI.Controllers
             var result = await _userManager.CreateAsync(applicationUser, signUp.Password);
 
             //3. Generate Email confirmation URL
-            if (!result.Succeeded)
+            if (result == null || !result.Succeeded)
             {
                 return BadRequest("Not created in database");
             }
@@ -116,8 +116,55 @@ namespace IdentityAPI.Controllers
                     expiration = token.ValidTo
                 });
             }
-            
+
             return Unauthorized();
+        }
+
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO forgotPassword)
+        {
+            //1. Get user using email
+
+            var user = await _userManager.FindByEmailAsync(forgotPassword.Email);
+            if (user == null)
+            {
+                return BadRequest("Email is not present in the database");
+            }
+
+            //2. Get reset token for this user
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            //3.Send  reset password link with token through email
+            //1.  Generate reset password link
+
+            var link = _configuration.GetValue<string>("Base_Url") + "/api/Authenticate/ResetPassword?EmailId=" +
+                                                                    user.Email +
+                                                                    "&Token=" + resetPasswordToken;
+
+            return Ok("Password reset link has been sent to your registered email");
+
+        }
+
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPassword)
+        {
+
+            //1. Get user using email
+
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+            if (user == null)
+            {
+                return BadRequest("Invalid link as email does not exist in the database");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok("Password has been changed successfully");
+            }
+
+            return BadRequest("Password is not changed. try again");
+
         }
 
         #endregion
